@@ -1,0 +1,17 @@
+arr[i] sec	large
+	20	20
+
+0	20	20	if(20 > 20)false else(20 > 20) false
+			
+			
+1	20	25	if(25 > 20)true  
+
+2	25	30	if(30 > 25)true  	
+
+3	25	30	if(15 > 30)false  else (15 > 25) false
+
+4	30	50	if(50 > 30)true
+
+5	40	50	if(40 > 50)false  else (40 > 30) true
+		  
+6	40	50	if(18 > 50)false  else (18 > 40) false 

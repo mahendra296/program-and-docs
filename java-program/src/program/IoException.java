@@ -1,0 +1,6 @@
+package program;
+
+class IoException
+{
+
+}
