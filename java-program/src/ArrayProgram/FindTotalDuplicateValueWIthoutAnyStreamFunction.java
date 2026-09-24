@@ -1,3 +1,5 @@
+package ArrayProgram;
+
 public class FindTotalDuplicateValueWIthoutAnyStreamFunction {
     public static void main(String[] args) {
         findDuplicateValues();

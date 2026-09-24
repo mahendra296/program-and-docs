@@ -14,7 +14,7 @@ public class ForLoopExample
 					System.out.println("GEEKS");
 		
 				int i = 0;
-				for (System.out.println("HI"); i < 1; i++)		// the initialization section we can take any valid java statement including System.out.println(). In the for loop initialization section is executed only once that’s why here it will print first HI and after that HELLO GEEKS
+				for (System.out.println("HI"); i < 1; i++)		// the initialization section we can take any valid java statement including System.out.println(). In the for loop initialization section is executed only once thatâ€™s why here it will print first HI and after that HELLO GEEKS
 					System.out.println("HELLO GEEKS");
 		
 				for (int i = 0;; i++)

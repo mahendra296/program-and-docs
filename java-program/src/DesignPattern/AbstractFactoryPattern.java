@@ -1,3 +1,5 @@
+package DesignPattern;
+
 // Abstract products
 interface Button {
     void paint();

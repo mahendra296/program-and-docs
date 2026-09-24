@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
  *
  * @author Student
  */
-public class pra3
+public class Factorial
 {
 
 	/**

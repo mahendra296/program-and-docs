@@ -32,7 +32,7 @@ public class Constructor
 
 First t2 object is instantiated in the main method. As the order of initialization of local variables comes first than the constructor,
 first the instance variable (t1), in the class Test2 is allocated to the memory. In this line a new Test1 object is created, constructor 
-is called in class Test1 and ‘Constructor called 10’ is printed. Next the constructor of Test2 is called and again a new object of the 
-class Test1 is created and ‘Constructor called 5’ is printed.
+is called in class Test1 and â€˜Constructor called 10â€™ is printed. Next the constructor of Test2 is called and again a new object of the 
+class Test1 is created and â€˜Constructor called 5â€™ is printed.
 
 */

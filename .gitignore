@@ -4,4 +4,5 @@
 .settings/*
 .classpath
 .idea/*
+out/**
 java-program/**/*.class

@@ -23,8 +23,8 @@ public class ClassConcept
 	{     
 	    System.out.println("String");  														 
 	}															//	In this case of method Overloading, the most specific method is choosen at compile time.
-	public static void gfg(Object o) 							//	As ‘java.lang.String’ and ‘java.lang.Integer’ is a more specific type than ‘java.lang.Object’,
-	{															//	but between ‘java.lang.String’ and ‘java.lang.Integer’ none is more specific. 
+	public static void gfg(Object o) 							//	As â€˜java.lang.Stringâ€™ and â€˜java.lang.Integerâ€™ is a more specific type than â€˜java.lang.Objectâ€™,
+	{															//	but between â€˜java.lang.Stringâ€™ and â€˜java.lang.Integerâ€™ none is more specific. 
 	    System.out.println("Object"); 		
 	} 
 	public static void gfg(Integer i) 

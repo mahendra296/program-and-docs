@@ -1,6 +1,5 @@
 package ArrayProgram;
 
-import com.sun.istack.internal.FinalArrayList;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
