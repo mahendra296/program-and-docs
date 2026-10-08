@@ -2,6 +2,10 @@
 
 > A deep-dive into Spring's transaction management: when transactions commit, how propagation works, rollback rules, and real-world patterns.
 
+[⬅ Back to Spring Boot Annotations Guide](java-spring-boot-document-with-full-details.md#table-of-contents)
+
+> **Version note:** Written for **Spring Boot 3.x / Spring Framework 6.x**. Annotation package: `org.springframework.transaction.annotation.Transactional`.
+
 ---
 
 ## Table of Contents
@@ -11,17 +15,23 @@
 3. [Transaction Commit Timing](#transaction-commit-timing)
 4. [Scenario Walkthroughs](#scenario-walkthroughs)
 5. [All @Transactional Attributes](#all-transactional-attributes)
+   - [value / transactionManager](#value--transactionmanager)
    - [propagation](#propagation)
    - [isolation](#isolation)
    - [readOnly](#readonly)
-   - [timeout](#timeout)
+   - [timeout / timeoutString](#timeout--timeoutstring)
    - [rollbackFor / rollbackForClassName](#rollbackfor--rollbackforclassname)
    - [noRollbackFor / noRollbackForClassName](#norollbackfor--norollbackforclassname)
+   - [label](#label)
 6. [Propagation Deep Dive](#propagation-deep-dive)
 7. [Isolation Deep Dive](#isolation-deep-dive)
-8. [Common Pitfalls](#common-pitfalls)
-9. [Best Practices](#best-practices)
-10. [Quick Reference Table](#quick-reference-table)
+8. [Where to Put @Transactional](#where-to-put-transactional)
+9. [Programmatic Transactions (TransactionTemplate)](#programmatic-transactions-transactiontemplate)
+10. [@TransactionalEventListener](#transactionaleventlistener)
+11. [@Transactional in Tests](#transactional-in-tests)
+12. [Common Pitfalls](#common-pitfalls)
+13. [Best Practices](#best-practices)
+14. [Quick Reference Table](#quick-reference-table)
 
 ---
 
@@ -61,8 +71,18 @@ Spring wraps your bean in a **proxy** at runtime. When you call a `@Transactiona
 [Caller] ← returns result
 ```
 
-> **Important**: `@Transactional` only works on public methods called **from outside the bean**.  
+> **Important**: `@Transactional` only works when the method is called **from outside the bean** (through the proxy).
 > Self-invocation (`this.method()`) bypasses the proxy and has no transactional effect.
+>
+> **Method visibility:** `private` methods are never transactional. Since **Spring Framework 6.0**, `protected` and package-private methods are also supported with class-based (CGLIB) proxies, which Spring Boot uses by default. `public` methods are still the safest choice and work with every proxy type.
+
+Spring Boot auto-configures transaction management (`@EnableTransactionManagement` is applied for you) and picks the transaction manager from your dependencies:
+
+| Dependency | Transaction manager |
+|------------|---------------------|
+| `spring-boot-starter-data-jpa` | `JpaTransactionManager` |
+| `spring-boot-starter-jdbc` | `JdbcTransactionManager` (a `DataSourceTransactionManager`) |
+| `spring-boot-starter-data-mongodb` | `MongoTransactionManager` (must be declared as a bean yourself) |
 
 ---
 
@@ -163,16 +183,72 @@ AuthController
 
 ```java
 @Transactional(
-    propagation          = Propagation.REQUIRED,
-    isolation            = Isolation.DEFAULT,
-    readOnly             = false,
-    timeout              = -1,
-    rollbackFor          = {},
-    rollbackForClassName = {},
-    noRollbackFor        = {},
-    noRollbackForClassName = {}
+    transactionManager     = "",                    // alias: value
+    propagation            = Propagation.REQUIRED,
+    isolation              = Isolation.DEFAULT,
+    readOnly               = false,
+    timeout                = -1,                    // TransactionDefinition.TIMEOUT_DEFAULT
+    timeoutString          = "",
+    rollbackFor            = {},
+    rollbackForClassName   = {},
+    noRollbackFor          = {},
+    noRollbackForClassName = {},
+    label                  = {}
 )
 ```
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `value` / `transactionManager` | `String` | `""` | Bean name (or qualifier) of the transaction manager to use. Empty → the default/primary one. |
+| `propagation` | `Propagation` | `REQUIRED` | How the method behaves when a transaction already exists. |
+| `isolation` | `Isolation` | `DEFAULT` | Isolation level of a **new** transaction. |
+| `readOnly` | `boolean` | `false` | Optimization hint for read-only work. |
+| `timeout` | `int` | `-1` | Timeout in seconds for a **new** transaction (`-1` = use the underlying system's default). |
+| `timeoutString` | `String` | `""` | Same as `timeout`, but as a String so it can use a placeholder like `"${app.tx.timeout}"`. |
+| `rollbackFor` | `Class<? extends Throwable>[]` | `{}` | Extra exception types that cause rollback. |
+| `rollbackForClassName` | `String[]` | `{}` | Same as `rollbackFor`, using class name patterns. |
+| `noRollbackFor` | `Class<? extends Throwable>[]` | `{}` | Exception types that must **not** cause rollback. |
+| `noRollbackForClassName` | `String[]` | `{}` | Same as `noRollbackFor`, using class name patterns. |
+| `label` | `String[]` | `{}` | Free-form labels describing the transaction, for custom transaction managers / monitoring. |
+
+> `isolation`, `timeout` and `readOnly` only take effect when a **new** transaction starts (`REQUIRED` with no existing transaction, `REQUIRES_NEW`, `NESTED` at the outer level). A method that **joins** an existing transaction uses that transaction's settings.
+
+---
+
+### `value` / `transactionManager`
+
+Selects which `TransactionManager` bean to use. Needed only when the application has **more than one** (e.g. two databases, or JPA + MongoDB).
+
+```java
+@Configuration
+public class TxConfig {
+
+    @Bean
+    @Primary
+    public PlatformTransactionManager ordersTxManager(EntityManagerFactory ordersEmf) {
+        return new JpaTransactionManager(ordersEmf);
+    }
+
+    @Bean
+    public PlatformTransactionManager reportingTxManager(DataSource reportingDataSource) {
+        return new JdbcTransactionManager(reportingDataSource);
+    }
+}
+
+@Service
+public class ReportService {
+
+    // Uses the "reportingTxManager" bean instead of the @Primary one
+    @Transactional(transactionManager = "reportingTxManager", readOnly = true)
+    public List<SalesRow> monthlySales() { ... }
+
+    // value is an alias, so this is the same
+    @Transactional("reportingTxManager")
+    public void refreshSnapshot() { ... }
+}
+```
+
+> A transaction is bound to **one** transaction manager. Writing to two databases in one `@Transactional` method does **not** make it atomic across both; that requires distributed transactions (JTA) or patterns like Outbox/Saga.
 
 ---
 
@@ -217,29 +293,37 @@ AuthController
 
 ---
 
-### `timeout`
+### `timeout` / `timeoutString`
 
 ```java
 @Transactional(timeout = 30) // seconds
 public void longRunningOperation() {
-    // If this takes more than 30 seconds, transaction is rolled back
+    // If the transaction runs longer than 30 seconds, the next database call fails and T1 rolls back
 }
+
+// Configurable via application.properties: app.tx.import-timeout=120
+@Transactional(timeoutString = "${app.tx.import-timeout}")
+public void importData() { ... }
 ```
 
 | Aspect | Detail |
 |--------|--------|
-| **Default** | `-1` (no timeout) |
+| **Default** | `-1` (use the underlying transaction system's default, usually no limit) |
 | **Unit** | Seconds |
-| **On timeout** | Throws `TransactionTimedOutException`, triggers rollback |
+| **How it is enforced** | Spring sets a deadline when the transaction starts. Each JDBC statement gets a query timeout of the **remaining** time, and Spring checks the deadline before each statement. |
+| **On timeout** | `TransactionTimedOutException` (or a JDBC query-timeout exception) is thrown, which triggers rollback |
+| **Not interrupted** | Pure Java work (loops, HTTP calls) is **not** stopped; the timeout is noticed at the next database access |
 | **Use for** | Preventing long-running transactions from holding locks |
 
 ```
-T1 BEGINS
-  ├── 0s  - start
-  ├── 15s - still running...
-  ├── 30s - TIMEOUT ← TransactionTimedOutException thrown
+T1 BEGINS (timeout = 30s)
+  ├── 0s  - SELECT ...           (query timeout = 30s)
+  ├── 25s - UPDATE ...           (query timeout = 5s)
+  ├── 31s - INSERT ...  ← deadline passed → TransactionTimedOutException
   └── T1 ROLLS BACK ✗
 ```
+
+Global default for all transactions: `spring.transaction.default-timeout=30s`.
 
 ---
 
@@ -264,7 +348,7 @@ public void method() throws IOException {
 }
 
 // Using class name (string-based, useful for cross-module references)
-@Transactional(rollbackForClassName = {"IOException", "CustomBusinessException"})
+@Transactional(rollbackForClassName = {"java.io.IOException", "com.example.CustomBusinessException"})
 public void method() { ... }
 
 // Multiple exceptions
@@ -280,6 +364,17 @@ Exception thrown
   └── Is it a checked Exception?
         ├── Listed in rollbackFor? → YES → ROLLBACK
         └── Not listed?           → NO  → COMMIT
+```
+
+> **Class name patterns match by substring.** `rollbackForClassName = "Exception"` matches almost every exception, and `"IOException"` also matches `UncheckedIOException`. Prefer `rollbackFor` with real classes, or use fully-qualified names.
+
+**Roll back on every exception by default (Spring Framework 6.2+):**
+
+```java
+@Configuration
+@EnableTransactionManagement(rollbackOn = RollbackOn.ALL_EXCEPTIONS)
+public class TxConfig { }
+// Now checked exceptions also roll back, without rollbackFor on each method
 ```
 
 ---
@@ -305,6 +400,19 @@ public void method() { ... }
 ```
 
 **When to use**: When you want partial commits — e.g., saving an audit/log entry regardless of business rule failures.
+
+> `noRollbackFor` only works on the method that **starts** the transaction. If an inner `REQUIRED` method throws an exception that is not excluded **on that inner method**, the transaction is already marked rollback-only (see [Pitfall 4](#4-transaction-marked-rollback-only)).
+
+---
+
+### `label`
+
+Descriptive labels attached to the transaction definition (Spring Framework 5.3+). Spring's standard transaction managers **ignore** them; custom `TransactionManager` implementations or monitoring code can read them via `TransactionDefinition.getLabels()`.
+
+```java
+@Transactional(label = {"batch", "priority:low"})
+public void nightlyCleanup() { ... }
+```
 
 ---
 
@@ -368,6 +476,10 @@ AuthController (no TX)
 - If T2 rolls back, T1 is **not affected** (unless the exception propagates uncaught)
 
 **Use case**: Audit logging, notification events, any "fire and forget" secondary operation that must persist regardless of the main transaction outcome.
+
+> **Connection pool warning:** while T2 runs, T1 is suspended but still **holds its database connection**. Each `REQUIRES_NEW` level needs one more connection. Under load (or with nested `REQUIRES_NEW` calls) a small pool can deadlock waiting for connections. Size the pool accordingly, and don't call `REQUIRES_NEW` in loops.
+>
+> **Must be a different bean:** `REQUIRES_NEW` on a method called via `this.` is ignored (self-invocation), so the work silently stays in T1.
 
 ---
 
@@ -497,6 +609,14 @@ AuthController (no TX)
 
 **Requires**: JDBC savepoint support (not all databases / transaction managers support this).
 
+| Transaction manager | `NESTED` support |
+|---------------------|------------------|
+| `DataSourceTransactionManager` / `JdbcTransactionManager` (JDBC, `JdbcTemplate`) | ✅ Savepoints |
+| `JpaTransactionManager` (Spring Data JPA / Hibernate) | ⚠️ Not allowed by default (`nestedTransactionAllowed = false`) → `NestedTransactionNotSupportedException`. Even when enabled, the savepoint only rolls back **JDBC** changes; the `EntityManager`'s cached entities are not rolled back. |
+| `JtaTransactionManager` | ❌ Usually not supported |
+
+> In a typical Spring Boot + JPA application, use `REQUIRES_NEW` (separate transaction) instead of `NESTED`.
+
 ---
 
 ### Propagation Comparison Table
@@ -514,6 +634,8 @@ AuthController (no TX)
 ---
 
 ## Isolation Deep Dive
+
+> More on anomalies, per-database defaults, MVCC and locks: [Database Systems Guide](Database_systems.md#4-transaction-isolation-levels).
 
 Isolation controls what **concurrent** transactions can see of each other's uncommitted or in-progress data.
 
@@ -598,6 +720,170 @@ No anomalies possible, but performance cost is significant.
 
 ---
 
+## Where to Put `@Transactional`
+
+| Placement | Effect |
+|-----------|--------|
+| **Class** | Applies to every method of the bean that the proxy can intercept. |
+| **Method** | Applies to that method; **overrides** class-level settings completely (attributes are not merged). |
+| **Interface / interface method** | Works with JDK and CGLIB proxies since Spring 5. Annotating the concrete class is still recommended. |
+| **Spring Data repository** | `SimpleJpaRepository` is already `@Transactional(readOnly = true)` at class level, and its write methods (`save`, `delete`...) are `@Transactional`. |
+
+```java
+@Service
+@Transactional(readOnly = true)            // default for all methods: read-only
+public class OrderService {
+
+    public Order findById(Long id) { ... }            // read-only TX
+
+    public List<Order> findRecent() { ... }           // read-only TX
+
+    @Transactional                                     // overrides: read-write TX
+    public Order place(OrderRequest request) { ... }
+
+    @Transactional(rollbackFor = PaymentException.class, timeout = 10)
+    public void pay(Long orderId) throws PaymentException { ... }
+}
+```
+
+`jakarta.transaction.Transactional` (JTA) is also recognized by Spring, but it supports fewer options (`value` = TxType, `rollbackOn`, `dontRollbackOn`; no isolation, timeout or readOnly). Prefer Spring's annotation.
+
+---
+
+## Programmatic Transactions (`TransactionTemplate`)
+
+Use code instead of the annotation when you need a transaction around **part** of a method, in a loop per item, or inside a method of the **same class** (avoids the self-invocation problem).
+
+```java
+@Service
+public class ImportService {
+
+    private final TransactionTemplate tx;
+    private final ProductRepository productRepository;
+
+    public ImportService(PlatformTransactionManager txManager, ProductRepository productRepository) {
+        this.tx = new TransactionTemplate(txManager);
+        this.tx.setTimeout(30);
+        this.productRepository = productRepository;
+    }
+
+    // Each row commits in its own transaction; one bad row doesn't undo the others
+    public ImportResult importAll(List<ProductRow> rows) {
+        int ok = 0, failed = 0;
+        for (ProductRow row : rows) {
+            try {
+                tx.executeWithoutResult(status -> productRepository.save(row.toEntity()));
+                ok++;
+            } catch (RuntimeException e) {
+                failed++;                                  // only this row was rolled back
+            }
+        }
+        return new ImportResult(ok, failed);
+    }
+
+    // Returning a value + manual rollback without throwing
+    public Long createIfValid(Product p) {
+        return tx.execute(status -> {
+            Product saved = productRepository.save(p);
+            if (saved.getPrice().signum() < 0) {
+                status.setRollbackOnly();                  // roll back, return null
+                return null;
+            }
+            return saved.getId();
+        });
+    }
+}
+```
+
+Inside an annotated method you can also mark rollback without throwing:
+
+```java
+@Transactional
+public void process() {
+    // ...
+    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+}
+```
+
+---
+
+## `@TransactionalEventListener`
+
+Runs an event listener **at a specific phase of the publishing transaction** — most commonly **after commit**, so emails, messages or cache updates happen only when the data is really saved.
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `phase` | `TransactionPhase` | `AFTER_COMMIT` | `BEFORE_COMMIT`, `AFTER_COMMIT`, `AFTER_ROLLBACK`, `AFTER_COMPLETION` (commit or rollback). |
+| `fallbackExecution` | `boolean` | `false` | `true` → still run the listener if the event is published **without** a transaction (runs immediately). |
+| `value` / `classes` | `Class<?>[]` | `{}` | Event types handled (normally inferred from the method parameter). |
+| `condition` | `String` | `""` | SpEL condition, e.g. `"#event.amount > 1000"`. |
+| `id` | `String` | `""` | Listener id. |
+
+```java
+public record UserRegisteredEvent(Long userId, String email) {}
+
+@Service
+public class AuthService {
+    private final ApplicationEventPublisher events;
+    // ...
+    @Transactional
+    public AuthResponse register(RegisterRequest request) {
+        User user = userRepository.save(new User(request));
+        events.publishEvent(new UserRegisteredEvent(user.getId(), user.getEmail()));
+        return new AuthResponse(user.getId());
+    }   // ← commit happens here, THEN the listener below runs
+}
+
+@Component
+public class WelcomeMailListener {
+
+    @TransactionalEventListener                      // phase = AFTER_COMMIT
+    public void sendWelcomeMail(UserRegisteredEvent event) {
+        mailService.sendWelcome(event.email());      // never sent if register() rolled back
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
+    public void onFailure(UserRegisteredEvent event) {
+        log.warn("Registration rolled back for {}", event.email());
+    }
+}
+```
+
+> In `AFTER_COMMIT` the original transaction is already committed. If the listener needs to **write** to the database, annotate it with `@Transactional(propagation = Propagation.REQUIRES_NEW)` (Spring rejects plain `REQUIRED` here since 6.1) or run it `@Async`.
+
+---
+
+## `@Transactional` in Tests
+
+In Spring test classes (`@SpringBootTest`, `@DataJpaTest`), `@Transactional` on a test method or class means: **run the test in a transaction and roll it back at the end**, so the database is clean for the next test.
+
+```java
+@DataJpaTest                     // already @Transactional: every test rolls back
+class UserRepositoryTest {
+
+    @Autowired UserRepository repo;
+
+    @Test
+    void savesUser() {
+        repo.save(new User("mahendra"));
+        assertThat(repo.count()).isEqualTo(1);
+    }   // rolled back automatically
+}
+
+@SpringBootTest
+@Transactional
+class AuthServiceTest {
+
+    @Test
+    @Commit                      // keep the data (same as @Rollback(false))
+    void registerCommits() { ... }
+}
+```
+
+> **Caveat:** if the test is transactional, your service's `REQUIRED` methods **join** the test transaction, so you never test the real commit (constraint violations at flush time, `@TransactionalEventListener(AFTER_COMMIT)` listeners). Call `entityManager.flush()` in the test, or test those paths without `@Transactional`.
+
+---
+
 ## Common Pitfalls
 
 ### 1. Self-Invocation (The Most Common Bug)
@@ -620,17 +906,20 @@ public class AuthService {
 }
 ```
 
-**Fix**: Extract `@Transactional` methods to a separate Spring-managed bean, or use `ApplicationContext.getBean()` self-injection.
+**Fix** (in order of preference):
+1. Move the `@Transactional` method to a **separate bean** and call it through that bean.
+2. Use a [`TransactionTemplate`](#programmatic-transactions-transactiontemplate) inside the same class.
+3. Self-inject the proxy: `@Autowired @Lazy private AuthService self;` then call `self.register(request)`.
 
 ---
 
-### 2. `@Transactional` on Non-Public Methods
+### 2. `@Transactional` on Private Methods
 
 ```java
 @Service
 public class AuthService {
 
-    // ❌ WRONG — Spring's default proxy ignores non-public methods
+    // ❌ WRONG — a proxy can never intercept a private method (silently no transaction)
     @Transactional
     private void register(RegisterRequest request) { ... }
 
@@ -639,6 +928,8 @@ public class AuthService {
     public void register(RegisterRequest request) { ... }
 }
 ```
+
+`protected` and package-private methods work with Spring Boot's default CGLIB proxies since Spring Framework 6.0, but `public` remains the safest choice. Even when visible, a method only becomes transactional if it's called from **another bean** (see pitfall 1).
 
 ---
 
@@ -721,16 +1012,20 @@ public class AuthService {
 ### 6. Lazy Loading Outside Transaction
 
 ```java
-@Transactional
+@Transactional(readOnly = true)
 public User getUser(Long id) {
-    return userRepository.findById(id).get(); // loaded
-} // ← transaction ends here
+    return userRepository.findById(id).orElseThrow(); // roles not loaded yet (LAZY)
+} // ← transaction and persistence context end here
 
-// Later in controller:
-user.getRoles(); // ❌ LazyInitializationException — no active session!
+// Later, outside the transaction (async task, scheduled job, Kafka listener...):
+user.getRoles().size(); // ❌ LazyInitializationException — could not initialize proxy - no Session
 ```
 
-**Fix**: Use `@Transactional(readOnly = true)` at the service level, fetch eagerly with JOIN FETCH, or use DTOs.
+**Fix**: Load what you need **inside** the transaction:
+- Map to a DTO inside the `@Transactional` method (preferred).
+- Fetch the association in the query: `JOIN FETCH` or `@EntityGraph(attributePaths = "roles")`.
+
+> **Open Session in View:** Spring Boot enables `spring.jpa.open-in-view=true` by default (and logs a warning). It keeps the persistence context open for the whole web request, so the same code **won't fail inside a controller**, but it silently runs extra lazy-loading queries while rendering the response. Many teams set `spring.jpa.open-in-view=false` and load data explicitly.
 
 ---
 
@@ -744,8 +1039,10 @@ user.getRoles(); // ❌ LazyInitializationException — no active session!
 | Don't catch and swallow exceptions | Prevents silent data corruption |
 | Use `REQUIRES_NEW` for audit logs | Audit must persist even if main TX rolls back |
 | Avoid `Propagation.NEVER` unless enforcing strict rules | Usually unnecessary |
-| Always specify `rollbackFor` for checked exceptions | Default behavior is surprising |
+| Always specify `rollbackFor` for checked exceptions | Default behavior is surprising (or use `rollbackOn = ALL_EXCEPTIONS` on Spring 6.2+) |
 | Never use `@Transactional` on private methods | Proxy won't intercept them |
+| No remote calls (HTTP, email, Kafka) inside a transaction | Holds DB connections and locks while waiting; use `@TransactionalEventListener(AFTER_COMMIT)` |
+| Prefer `REQUIRES_NEW` over `NESTED` with JPA | `JpaTransactionManager` doesn't allow `NESTED` by default |
 | Test rollback scenarios | Verify your rollback rules work as expected |
 | Monitor transaction boundaries | Use logging or AOP to trace TX open/close |
 
@@ -777,12 +1074,14 @@ user.getRoles(); // ❌ LazyInitializationException — no active session!
 
 | Attribute | Default Value |
 |-----------|--------------|
+| `value` / `transactionManager` | `""` (primary transaction manager) |
 | `propagation` | `REQUIRED` |
 | `isolation` | `DEFAULT` (DB default) |
 | `readOnly` | `false` |
-| `timeout` | `-1` (no limit) |
-| `rollbackFor` | `{}` (only RuntimeException/Error) |
-| `noRollbackFor` | `{}` |
+| `timeout` / `timeoutString` | `-1` / `""` (system default, usually no limit) |
+| `rollbackFor` / `rollbackForClassName` | `{}` (only RuntimeException/Error) |
+| `noRollbackFor` / `noRollbackForClassName` | `{}` |
+| `label` | `{}` |
 
 ---
 
