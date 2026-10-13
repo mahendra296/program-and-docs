@@ -54,7 +54,7 @@ The `docs/` directory contains reference guides on various technologies:
 |----------|-------------|
 | [Java Collections](docs/java-collections.md) | Complete guide to the Java Collections Framework — Map, Set, List, and Queue implementations |
 | [Java Design Patterns](docs/java-design-patterns.md) | Complete guide to creational, structural, and behavioral design patterns in Java |
-| [GraphQL Guide](docs/GraphQL-docs.md) | GraphQL fundamentals including queries, mutations, response handling, and Spring Boot integration |
+| [GraphQL Guide](docs/GraphQL-docs.md) | GraphQL fundamentals (queries, mutations, response handling) and Spring Boot implementation with Spring for GraphQL, Netflix DGS, Apollo Kotlin, and GraphQL Java Kickstart |
 | [Kotlin vs Java](docs/kotlin-features-over-java.md) | Comprehensive comparison of Kotlin features over Java with syntax examples |
 | [Node.js & Express.js](docs/node-feature.md) | Reference guide for Node.js and Express.js features, NPM commands, and application setup |
 | [Prisma vs Drizzle](docs/node-prisma-drizzle.md) | Complete comparison of Prisma and Drizzle ORMs for Node.js |
