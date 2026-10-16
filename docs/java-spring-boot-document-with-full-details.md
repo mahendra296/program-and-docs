@@ -4,7 +4,7 @@ A detailed reference for Spring and Spring Boot annotations (plus the JPA, valid
 
 > **Version note:** Examples target **Spring Boot 3.x / Spring Framework 6.x** (Java 17+). Validation annotations use the `jakarta.*` packages. On Spring Boot 2.x replace `jakarta.` with `javax.`.
 
-> **Related guides:** [Database Systems (SQL, DDL/DML, isolation, locks, indexing)](Database_systems.md) · [Spring @Transactional Guide](java-spring-transactional.md) · [AWS Services Guide (Secrets Manager, SQS, SNS, EventBridge Scheduler)](AWS_Service_guide.md) · [GraphQL Guide (Spring for GraphQL, Netflix DGS, Apollo Kotlin)](GraphQL-docs.md)
+> **Related guides:** [Database Systems (SQL, DDL/DML, isolation, locks, indexing)](Database_systems.md) · [Spring @Transactional Guide](java-spring-transactional.md) · [AWS Services Guide (Secrets Manager, SQS, SNS, EventBridge Scheduler)](AWS_Service_guide.md) · [GraphQL Guide (Spring for GraphQL, Netflix DGS, Apollo Kotlin)](GraphQL-docs.md) · [Gradle with Spring Boot (build.gradle / build.gradle.kts, multi-module)](gradle-with-spring-boot.md)
 
 ## Table of Contents
 
@@ -106,6 +106,7 @@ A detailed reference for Spring and Spring Boot annotations (plus the JPA, valid
 - [Database Systems Guide ↗](Database_systems.md) *separate file: SQL categories, isolation levels, lock types, indexing, tuning*
 - [AWS Services Guide ↗](AWS_Service_guide.md) *separate file: Secrets Manager, SQS, SNS, EventBridge Scheduler with Spring Boot*
 - [GraphQL Guide ↗](GraphQL-docs.md) *separate file: queries/mutations, spring-boot-starter-graphql vs Netflix DGS vs Apollo Kotlin (apollo-runtime), implementation with Spring Boot*
+- [Gradle with Spring Boot Guide ↗](gradle-with-spring-boot.md) *separate file: every build.gradle / build.gradle.kts block explained, Spring Boot Gradle plugin (bootJar, bootRun, bootBuildImage), settings.gradle, gradle.properties, version catalogs, multi-module projects*
 ---
 
 # 1. Spring Core / Component Annotations
@@ -1898,6 +1899,8 @@ IDE auto-completion for your own properties:
     <optional>true</optional>
 </dependency>
 ```
+
+Gradle: `annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")`. See [Gradle → Dependency Configurations](gradle-with-spring-boot.md#36-dependency-configurations-scopes).
 
 > **Secrets** (DB passwords, API keys) shouldn't live in `application.yml`. With Spring Cloud AWS, `spring.config.import=aws-secretsmanager:<secret-name>` loads them as ordinary properties; see [AWS Secrets Manager → Spring Boot Integration](AWS_Service_guide.md#spring-boot-integration--sdk-examples).
 
@@ -12181,6 +12184,8 @@ These are **Lombok** annotations, not Spring annotations, but you'll see them in
     <optional>true</optional>
 </dependency>
 ```
+
+Gradle needs two lines, `compileOnly("org.projectlombok:lombok")` and `annotationProcessor("org.projectlombok:lombok")`. See [Gradle → Lombok: why two configurations?](gradle-with-spring-boot.md#36-dependency-configurations-scopes).
 
 Install the Lombok plugin in your IDE (built into IntelliJ) and enable annotation processing. With the Spring Boot Maven plugin, Lombok is excluded from the final jar automatically.
 

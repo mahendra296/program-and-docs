@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1015" height="1202" viewBox="0 0 1015 1202" role="img" aria-labelledby="title desc" font-family="Arial, Helvetica, 'Liberation Sans', sans-serif">
+<title id="title">Java Collections Framework: interfaces and their implementation classes</title>
+<desc id="desc">Iterable, Collection, SequencedCollection, List, Set, Queue and Map with their implementation classes. Types added in Java 21 are marked.</desc>
+<rect x="0.5" y="0.5" width="1014" height="1201" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="24" y="36" font-size="16" font-weight="700" fill="#0f172a">Java Collections Framework: interfaces and their implementation classes</text>
+<rect x="24" y="60" width="967" height="630" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+<text x="38" y="82" font-size="12.5" font-weight="700" fill="#475569">Collection hierarchy (single elements)</text>
+<rect x="24" y="710" width="597" height="472" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+<text x="38" y="732" font-size="12.5" font-weight="700" fill="#475569">Map hierarchy (key → value pairs; Map is not a Collection)</text>
+<path d="M476 180 L476 151" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M164.5 242 L786 242" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M164.5 270 L164.5 242" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M476 270 L476 242" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M786 270 L786 242" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M476 242 L476 231" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M108.5 332 L150.5 332" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M108.5 360 L108.5 332" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M150.5 332 L150.5 321" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M178.5 332 L220.5 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M220.5 360 L220.5 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M178.5 332 L178.5 321" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M260.5 332 L692 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M260.5 360 L260.5 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M476 360 L476 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M692 360 L692 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M476 332 L476 321" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M732 332 L764 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M732 360 L732 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M764 332 L764 321" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M808 332 L888.5 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M888.5 360 L888.5 332" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M808 332 L808 321" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M786 540 L786 321" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M108.5 450 L108.5 411" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M138.5 422 L226.5 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M138.5 450 L138.5 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M226.5 422 L226.5 411" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M254.5 450 L254.5 411" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M254.5 540 L254.5 501" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M254.5 630 L254.5 591" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M367.5 422 L568.5 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M367.5 450 L367.5 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M476 450 L476 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M568.5 450 L568.5 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M476 422 L476 411" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M608.5 422 L712 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M608.5 450 L608.5 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M712 450 L712 422" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M712 422 L712 411" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M476 540 L476 501" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M888.5 450 L888.5 411" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M126.5 824 L352.8 824" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M126.5 852 L126.5 824" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M297.5 852 L297.5 824" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M352.8 824 L352.8 813" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M380.8 824 L553.5 824" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M436 852 L436 824" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M553.5 852 L553.5 824" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M380.8 824 L380.8 813" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M126.5 942 L126.5 903" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M283.5 942 L283.5 903" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M311.5 914 L406 914" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M406 942 L406 914" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M311.5 914 L311.5 903" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<path d="M436 942 L436 903" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M283.5 1032 L283.5 993" fill="none" stroke="#334155" stroke-width="1.4"/>
+<path d="M283.5 1122 L283.5 1083" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<polygon points="476,140 482.5,151 469.5,151" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="476,220 482.5,231 469.5,231" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="150.5,310 157,321 144,321" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="178.5,310 185,321 172,321" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="476,310 482.5,321 469.5,321" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="764,310 770.5,321 757.5,321" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="808,310 814.5,321 801.5,321" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="786,310 792.5,321 779.5,321" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="108.5,400 115,411 102,411" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="226.5,400 233,411 220,411" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="254.5,400 261,411 248,411" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="254.5,490 261,501 248,501" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="254.5,580 261,591 248,591" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="476,400 482.5,411 469.5,411" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="712,400 718.5,411 705.5,411" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="476,490 482.5,501 469.5,501" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="888.5,400 895,411 882,411" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="352.8,802 359.3,813 346.3,813" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="380.8,802 387.3,813 374.3,813" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="126.5,892 133,903 120,903" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="283.5,892 290,903 277,903" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="311.5,892 318,903 305,903" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="436,892 442.5,903 429.5,903" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="283.5,982 290,993 277,993" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<polygon points="283.5,1072 290,1083 277,1083" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<rect x="433" y="100" width="86" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="476" text-anchor="middle" font-size="10.5" fill="#1e40af" y="115">«interface»</text>
+<text x="476" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="131">Iterable</text>
+<rect x="429" y="180" width="94" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="476" text-anchor="middle" font-size="10.5" fill="#1e40af" y="195">«interface»</text>
+<text x="476" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="211">Collection</text>
+<rect x="121.5" y="270" width="86" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="164.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="285">«interface»</text>
+<text x="164.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="301">Set</text>
+<rect x="391.5" y="270" width="169" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="476" text-anchor="middle" font-size="10.5" fill="#1e40af" y="285">«interface»</text>
+<text x="476" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="301">SequencedCollection</text>
+<rect x="516" y="261" width="52.5" height="17" rx="8.5" fill="#d97706"/><text x="542.2" y="273.5" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">Java 21</text>
+<rect x="743" y="270" width="86" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="786" text-anchor="middle" font-size="10.5" fill="#1e40af" y="285">«interface»</text>
+<text x="786" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="301">Queue</text>
+<rect x="65.5" y="360" width="86" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="108.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="385">HashSet</text>
+<rect x="177.5" y="360" width="126" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="240.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="375">«interface»</text>
+<text x="240.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="391">SequencedSet</text>
+<rect x="259" y="351" width="52.5" height="17" rx="8.5" fill="#d97706"/><text x="285.2" y="363.5" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">Java 21</text>
+<rect x="433" y="360" width="86" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="476" text-anchor="middle" font-size="10.5" fill="#1e40af" y="375">«interface»</text>
+<text x="476" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="391">List</text>
+<rect x="669" y="360" width="86" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="712" text-anchor="middle" font-size="10.5" fill="#1e40af" y="375">«interface»</text>
+<text x="712" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="391">Deque</text>
+<rect x="824" y="360" width="129" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="888.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="375">«interface»</text>
+<text x="888.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="391">BlockingQueue</text>
+<rect x="44" y="450" width="129" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="108.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="475">LinkedHashSet</text>
+<rect x="207" y="450" width="95" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="254.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="465">«interface»</text>
+<text x="254.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="481">SortedSet</text>
+<rect x="324" y="450" width="87" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="367.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="475">ArrayList</text>
+<rect x="433" y="450" width="86" height="40" rx="4" fill="#ffedd5" stroke="#c2410c" stroke-width="1.6"/>
+<text x="476" text-anchor="middle" font-size="13.5" font-weight="700" fill="#431407" y="475">Vector</text>
+<rect x="541" y="450" width="95" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="588.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="475">LinkedList</text>
+<rect x="658" y="450" width="108" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="712" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="475">ArrayDeque</text>
+<rect x="806" y="450" width="165" height="40" rx="4" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.6"/>
+<text x="888.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#2e1065" y="475">ArrayBlockingQueue</text>
+<rect x="196" y="540" width="117" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="254.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="555">«interface»</text>
+<text x="254.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="571">NavigableSet</text>
+<rect x="433" y="540" width="86" height="40" rx="4" fill="#ffedd5" stroke="#c2410c" stroke-width="1.6"/>
+<text x="476" text-anchor="middle" font-size="13.5" font-weight="700" fill="#431407" y="565">Stack</text>
+<rect x="726.5" y="540" width="119" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="786" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="565">PriorityQueue</text>
+<rect x="211.5" y="630" width="86" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="254.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="655">TreeSet</text>
+<rect x="323.8" y="762" width="86" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="366.8" text-anchor="middle" font-size="10.5" fill="#1e40af" y="777">«interface»</text>
+<text x="366.8" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="793">Map</text>
+<rect x="61" y="852" width="131" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="126.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="867">«interface»</text>
+<text x="126.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="883">ConcurrentMap</text>
+<rect x="231" y="852" width="133" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="297.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="867">«interface»</text>
+<text x="297.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="883">SequencedMap</text>
+<rect x="319.5" y="843" width="52.5" height="17" rx="8.5" fill="#d97706"/><text x="345.7" y="855.5" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">Java 21</text>
+<rect x="390" y="852" width="92" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="436" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="877">HashMap</text>
+<rect x="506" y="852" width="95" height="40" rx="4" fill="#ffedd5" stroke="#c2410c" stroke-width="1.6"/>
+<text x="553.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#431407" y="877">Hashtable</text>
+<rect x="44" y="942" width="165" height="40" rx="4" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.6"/>
+<text x="126.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#2e1065" y="967">ConcurrentHashMap</text>
+<rect x="233" y="942" width="101" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="283.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="957">«interface»</text>
+<text x="283.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="973">SortedMap</text>
+<rect x="368" y="942" width="136" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="436" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="967">LinkedHashMap</text>
+<rect x="222" y="1032" width="123" height="40" rx="13" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="283.5" text-anchor="middle" font-size="10.5" fill="#1e40af" y="1047">«interface»</text>
+<text x="283.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0b1f4d" y="1063">NavigableMap</text>
+<rect x="239.5" y="1122" width="88" height="40" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/>
+<text x="283.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#052e16" y="1147">TreeMap</text>
+<text x="661" y="750" font-size="12.5" font-weight="700" fill="#475569">Legend</text>
+<rect x="661" y="756" width="26" height="16" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.4"/>
+<text x="695" y="768.2" font-size="12" fill="#334155">Interface</text>
+<rect x="661" y="783" width="26" height="16" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.4"/>
+<text x="695" y="795.2" font-size="12" fill="#334155">Class</text>
+<rect x="661" y="810" width="26" height="16" rx="4" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/>
+<text x="695" y="822.2" font-size="12" fill="#334155">Concurrent class (java.util.concurrent)</text>
+<rect x="661" y="837" width="26" height="16" rx="4" fill="#ffedd5" stroke="#c2410c" stroke-width="1.4"/>
+<text x="695" y="849.2" font-size="12" fill="#334155">Legacy class (Java 1.0)</text>
+<path d="M661 872 L696 872" stroke="#334155" stroke-width="1.4"/>
+<polygon points="707,872 696,878.5 696,865.5" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<text x="715" y="876.2" font-size="12" fill="#334155">extends</text>
+<path d="M661 899 L696 899" stroke="#334155" stroke-width="1.4" stroke-dasharray="6 4"/>
+<polygon points="707,899 696,905.5 696,892.5" fill="#ffffff" stroke="#334155" stroke-width="1.4" stroke-linejoin="round"/>
+<text x="715" y="903.2" font-size="12" fill="#334155">implements</text>
+<rect x="661" y="917.5" width="52.5" height="17" rx="8.5" fill="#d97706"/><text x="687.3" y="930" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">Java 21</text>
+<text x="721.5" y="930.2" font-size="12" fill="#334155">Added in Java 21</text>
+</svg>
